@@ -4,10 +4,14 @@ from dash.dependencies import Input, Output
 import pandas as pd
 from src import ids
 from src import klant_alarm_overzicht
-
+from src import mongodb as mongo
 
 dftest=klant_alarm_overzicht.dftest
 dftest=dftest.drop(columns=["_measurement","measurementName","endTime","_time"])
+
+
+
+
 
 def render(app: Dash) -> html.Div:
     @app.callback(

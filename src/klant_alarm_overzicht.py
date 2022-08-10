@@ -3,10 +3,15 @@ from dash import Dash, dcc, html
 from dash.dependencies import Input, Output
 import pandas as pd
 from src import ids
+from src import mongodb as mongo
 
 
 df = pd.read_csv("src/df.csv")
 dftest=df.drop(columns=["result","_start","_stop","table","Unnamed: 0"])
+for naam in dftest['id']:
+    klant = (mongo.find("Klanten", "_id", naam, "naam"))
+    dftest = dftest.replace(to_replace=naam, value=klant)
+
 # print(dftest['id'].unique())
 # print(dftest[dftest.duplicated(['id'], keep=False)])
 # print(dftest)
@@ -16,6 +21,7 @@ aantal=dftest['id'].value_counts()
 ALARM_DATA=aantal.reset_index(name='count')
 # aantal=pd.read_csv("aantal.csv")
 # print(aantal.head())
+
 
 def render(app: Dash) -> html.Div:
     @app.callback(
